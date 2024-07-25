@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+<script src="../main.js"></script>
+<link rel="stylesheet" href="../main.css">
+
+<body style="display: flex; flex-direction: row;">
+    <div class="lnb">
+        <div>
+            <div id="purgeButton" class="flexCenter">
+                <span>Purge RabbitMQ Queue</span>
+                <div class="alert disable">
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main">
+        <div class="section flexCenter">
+            <div id="reservationButton" class="btn flexCenter"><span>RESERVATION</span></div>
+
+        </div>
+        <div class="section flexCenter">
+            <div class="reservation-status">
+                <div class="flexCenter"><span>[대기열]</span></div>
+                <div><span>대기 인원 : </span><span id="reservation-total-count">예약 버튼 클릭</span></div>
+                <div><span style="margin-left: 47px;">순번 : </span><span id="reservation-order">예약 버튼 클릭</span></div>
+            </div>
+            <!-- <div><span id="refreshButton">새로고침</span></div> -->
+        </div>
+        <div class="section flexCenter">
+            <div class="status-header">
+                <div class="refreshButton" onclick="refreshSeat()"><span>새로고침</span></div>
+            </div>
+            <div id='seat-container' class="seat-container">
+                <div th:each="seat : ${seatList}" class="seat">
+                    <div th:text="${seat.seatId}"></div>
+                    <div th:text="${seat.seatName}"></div>
+                    <div th:text="${seat.curNum}+'/'+${seat.maxNum}"></div>
+                    <div class="submitButton">신청</div>
+                </div>
+
+                </div>
+                <div class="cover flexCenter">
+                    <span style="background-color: rgba(0,0,0,0.2);padding: 5px; border-radius: 5px;">대 기 중</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="rnb">
+        <div style="margin:10px;"><span style="font-size:20px;">[ Information Board ]</span></div>
+        <div style="
+                width: 200px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;">
+            <div><span>예약한 자리</span></div>
+            <div id="reserve-ok">
+
+            </div>
+        </div>
+    </div>
+
+</body>
+<script>
+    const userId = 'tester1';
+    let inOrder = false;
+    let isPass;
+    let reservationId;
+    let refreshInterval = 5000;
+    let intervalId;
+    
+    
+</script>
+
+</html>

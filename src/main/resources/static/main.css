@@ -1,0 +1,229 @@
+.flexCenter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.lnb {
+    min-width: 300px;
+    height: 1000px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    margin-right: 10px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.rnb {
+    min-width: 300px;
+    height: 1000px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    margin-left: 10px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.control-table {
+    width: 90%;
+
+}
+
+.control-table td {
+    height: 50px;
+}
+
+.control-table td input {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.control-table tr>td {
+    border-bottom: 1px solid black;
+}
+
+.control-table tr>td:nth-child(1) {
+    width: 70%;
+    border-right: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.control-table tr>td:nth-child(2) {
+    width: 26%;
+}
+
+.main {
+    width: calc(100vw - 600px);
+    min-width: 600px;
+}
+
+.section {
+    height: 200px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.section:nth-child(3) {
+    height: 300px;
+}
+
+
+.section:nth-child(4) {
+    height: 300px;
+}
+
+.btn {
+    width: 300px;
+    height: 100px;
+    background: beige;
+    border: 1px solid black;
+    border-radius: 10px;
+    font-size: 40px;
+}
+
+.btn:nth-child(2) {
+    margin-left: 10px;
+    width: 200px;
+}
+
+.selected-seat {
+    width: 100px;
+    height: 200px;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.selected-seat-container {
+    display: flex;
+    align-items: center;
+}
+
+.reservation-status {
+    width: 250px;
+    background: #c7c7c7;
+    flex-direction: column;
+    border: 1px solid;
+    margin-left: 20px;
+    font-size: 20px;
+    padding: 5px;
+}
+
+.status-header {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+}
+.refreshButton {
+    width: 60px;
+    font-size: 15px;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    top: 5px;
+    right: -127px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.cell-container {
+    display: flex;
+    flex-direction: column;
+    margin: 0px 10px;
+    border: 1px solid;
+}
+
+.seat-container {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+}
+
+.seat-container .cover {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.3);
+    width: 96%;
+    height: 100%;
+    left: 2%;
+    font-size: 50px;
+    color: rgba(255,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+}
+
+.row {
+    display: flex;
+}
+
+#purgeButton,
+#applyButton {
+    width: 235px;
+    height: 30px;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    margin-top: 10px;
+    font-size: 20px;
+    font-weight: 1000;
+    cursor: pointer;
+    position: relative;
+}
+
+#purgeButton {
+    background: rgb(223, 45, 75);
+}
+
+#applyButton {
+    background: rgb(40, 127, 226);
+}
+
+#purgeButton .alert {
+    position: absolute;
+    top: 65px;
+    font-weight: 500;
+    font-size: 16px;
+    transition: all 1s;
+}
+
+.disable {
+    display: none !important;
+}
+
+.divide-line {
+    width: 90%;
+    height: 1px;
+    background-color: rgba(0, 0, 0, 0.5);
+    margin: 10px 0 0 0;
+}
+
+.selected-seat-check {
+
+    padding: 3px 2px;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 1000;
+}
+#reserve-ok{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+.seat{
+    display: flex;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    margin:10px 0;
+}
+
+.seat > div{
+    margin:10px 20px;
+}
