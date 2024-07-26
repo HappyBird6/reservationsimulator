@@ -13,6 +13,20 @@
 
 <body style="display: flex; flex-direction: row;">
     <div class="lnb">
+        <div style="display: flex;
+            padding: 10px;">
+            <div style="
+            margin-right: 5px;
+            padding: 2px;">유저</div>
+            <input type="text" id="input_userId" value="tester1">
+            <div style="
+            border: 1px solid rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.2);
+            margin-left: 5px;
+            border-radius: 5px;
+            padding: 2px;"
+            onclick="changeUserId()">변경</div>
+        </div>
         <div>
             <div id="purgeButton" class="flexCenter">
                 <span>Purge RabbitMQ Queue</span>
@@ -40,16 +54,19 @@
                 <div class="refreshButton" onclick="refreshSeat()"><span>새로고침</span></div>
             </div>
             <div id='seat-container' class="seat-container">
-                <div th:each="seat : ${seatList}" class="seat">
-                    <div th:text="${seat.seatId}"></div>
+                <div th:each="seat : ${seatList}" class="seat" th:id="${seat.seatId}">
                     <div th:text="${seat.seatName}"></div>
-                    <div th:text="${seat.curNum}+'/'+${seat.maxNum}"></div>
-                    <div class="submitButton">신청</div>
+                    <div style="display:flex;width: 50px;">
+                        <div th:text="${seat.curNum}" class="curNum"></div>
+                        <div> / </div>
+                        <div th:text="${seat.maxNum}"></div>
+                    </div>
+                    <div class="submitButton" th:onclick="submitSeat([[${seat.seatId}]]);">신청</div>
                 </div>
 
                 </div>
                 <div class="cover flexCenter">
-                    <span style="background-color: rgba(0,0,0,0.2);padding: 5px; border-radius: 5px;">대 기 중</span>
+                    대 기 중
                 </div>
             </div>
         </div>
@@ -61,7 +78,7 @@
                 display: flex;
                 flex-direction: column;
                 align-items: center;">
-            <div><span>예약한 자리</span></div>
+            <div><span>예약 정보</span></div>
             <div id="reserve-ok">
 
             </div>
@@ -70,7 +87,7 @@
 
 </body>
 <script>
-    const userId = 'tester1';
+    let userId = 'tester1';
     let inOrder = false;
     let isPass;
     let reservationId;

@@ -22,6 +22,7 @@ public class SeatManager {
 
     @PostConstruct
     public void init() {
+        seatList.add(new Seat(10000l,"T",3,0));
         seatList.add(new Seat(10001l,"A",100,0));
         seatList.add(new Seat(10002l,"B",200,0));
         seatList.add(new Seat(10003l,"C",500,0));

@@ -21,55 +21,6 @@ document.addEventListener("DOMContentLoaded", e => {
         })
         inOrder = true;
     })
-    document.getElementById('submitButton').addEventListener('click', function () {
-        if (!isPass) return;
-        submitSeat().then(data => {
-            if (data[0] === '0') {
-                console.log("예약성공" + data);
-                let seats = data.split(';')[1]
-                let seatsPos = seats.split(',');
-                for (let i = 0; i < seatsPos.length - 1; i++) {
-                    let temp = seatsPos[i].split('-');
-                    let row = temp[0];
-                    let col = temp[1];
-                    document.getElementById('reserve-ok').innerHTML += `
-                        <div style="
-                            display: flex;
-                            width: 100px;
-                            justify-content: space-between;
-                            border-bottom: 1px dotted rgba(0, 0, 0, 0.5);
-                            padding-bottom: 3px;"
-                            id='reserve-ok-${row}-${col}'>
-                            <div class="flexCenter">
-                                <span>[${row},${col}]</span>
-                            </div>
-                            <div style="
-                                    border: 1px solid rgba(0, 0, 0, 0.5);
-                                    border-radius: 10px;
-                                    width: 50px;
-                                    height: 30px;
-                                    display: flex;
-                                    align-items: center;
-                                    justify-content: center;
-                                "onclick=cancelReservation(${row},${col})>
-                                <span>취소</span>
-                            </div>
-                        </div>
-                    `
-                }
-                // 예약석 클릭 닫기
-                isPass = false;
-                inOrder = false;
-                document.querySelector(".seat-container .cover").classList.remove("disable");
-                document.querySelector(".selected-seat").innerHTML = "";
-            } else {
-                document.querySelector(".selected-seat").innerHTML = "";
-                alert('이미 예약된 자리');
-                let temp = JSON.parse(data);
-                updateSeat(temp);
-            }
-        })
-    })
     document.getElementById('purgeButton').addEventListener('click', function () {
         purgeQueue().then(count => {
             console.log(`>> 큐에서 ${count}개 비워짐 <<`);
@@ -89,8 +40,9 @@ function refreshSeat() {
     if (!isPass) return;
     getSeat().then(data => {
         console.log(data);
-        let temp = JSON.parse(data);
-        updateSeat(temp);
+        const seatList = JSON.parse(data);        
+        
+        updateSeat(seatList);
     })
 }
 function setReservation() {
@@ -98,41 +50,18 @@ function setReservation() {
     clearInterval(intervalId);
     getSeat().then(data => {
         console.log(data);
-        let temp = JSON.parse(data);
-        updateSeat(temp);
+        const seatList = JSON.parse(data);        
+        
+        updateSeat(seatList);
     })
-    document.querySelector(".seat-container .cover").classList.add("disable");
+    const t = document.querySelector(".cover");
+    t.style.backgroundColor = "rgba(0,200,0,0.2)";
+    t.innerHTML = "예 약 중";
 }
-function updateSeat(temp) {
-    let row = temp.length;
-    let col = temp[0].length;
-    for (let i = 1; i < row; i++) {
-        for (let j = 1; j < col; j++) {
-            const cell = document.getElementById(`c${i}-${j}`);
-            cell.classList.remove('clicked');
-            cell.dataset.selected = 'f';
-            if (temp[i][j]) {
-                cell.classList.remove("closed");
-            } else {
-                cell.classList.add("closed");
-            }
-        }
-    }
-}
-function selectCell(x, y) {
-    if (!isPass) return;
-    const cell = document.getElementById(`c${x}-${y}`);
-    if (cell.classList.contains("closed")) return;
-    const selectedContainer = document.querySelector(".selected-seat");
-    if (cell.dataset.selected === 'f') {
-        cell.classList.add('clicked');
-        cell.dataset.selected = 't';
-        selectedContainer.innerHTML += `<div class='selected-seat-check' id='s${x}-${y}'>${x},${y}</div>`;
-
-    } else if (cell.dataset.selected === 't') {
-        cell.classList.remove('clicked');
-        cell.dataset.selected = 'f';
-        document.getElementById(`s${x}-${y}`).remove();
+function updateSeat(seatList) {
+    for(var e in seatList){
+        var seat = seatList[e];
+        document.getElementById(seat.seatId).querySelector('.curNum').innerText = seat.curNum;
     }
 }
 function startPolling(reservationId) {
@@ -231,23 +160,19 @@ const getSeat = async function () {
         if (!response.ok) {
             throw new Error(`[ERROR] Fetching ${url} : ${response.status}`);
         }
-        const count = await response.text();
-        return count;
+        const seatList = await response.text();
+        return seatList;
     } catch (error) {
         console.log('[ERROR] Function getSeat : ', error);
     }
 }
-const submitSeat = async function () {
+
+const submitSeat = async function (seatId) {
+    if (!isPass) return;
     const url = '/submitSeat'
     const data = new URLSearchParams();
-    const seats = document.querySelectorAll(".selected-seat-check");
-    let selectedSeat = '';
-    for (let i = 0; i < seats.length; i++) {
-        let id = seats[i].id.substring(1);
-        selectedSeat += id + ",";
-    }
+    data.append('seatId', seatId);
     data.append('userId', userId);
-    data.append('selectedSeat', selectedSeat);
     try {
         const response = await fetch(url, {
             method: 'POST',
@@ -260,9 +185,42 @@ const submitSeat = async function () {
         if (!response.ok) {
             throw new Error(`[ERROR] Fetching ${url} : ${response.status}`);
         }
-        const count = await response.text();
-        return count;
+        const res = await response.text();
+        console.log(res);
+        const seatList = JSON.parse(res.substring(2,res.length));
+        updateSeat(seatList);
+        if(res[0]==='1'){
+            alert('예약 실패');
+        }else if(res[0]==='0'){
+            console.log("예약 성공");
+            document.getElementById('reserve-ok').innerHTML += 
+            `
+                <div style="display:flex;">
+                    <div>${userId} : ${seatId}</div>
+                </div>
+            `
+            closeReservation();
+        }
+        return res;
     } catch (error) {
         console.log('[ERROR] Function submitSeat : ', error);
     }
+}
+const closeReservation = async function(){
+    isPass = false;
+    inOrder = false;
+    const t = document.querySelector(".cover");
+    t.style.backgroundColor = "rgba(0,0,0,0.5)";
+    t.innerHTML = "예 약 끝";
+}
+
+const changeUserId = function(){
+    if(isPass || inOrder) {
+        console.log("[유저 변경 실패] 예약 진행 중 변경 불가능");
+        return;
+    }
+    let newId = document.getElementById('input_userId').value;
+    let orderId = userId;
+    userId = newId;
+    console.log(`[유저 변경됨] ${orderId} -> ${userId}`);
 }

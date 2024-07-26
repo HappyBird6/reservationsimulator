@@ -29,6 +29,10 @@ public class ReservationController {
     @Autowired
     ReservationService reservationService;
 
+    @PostMapping("/purge")
+    public int purge(){
+        return QueueManager.purgeQueue(RabbitMQConfig.RESERVATION_ORDER_QUEUE);
+    }
     // 예약 대기열 신청
     // Producer
     @PostMapping("/reserve")
@@ -51,12 +55,12 @@ public class ReservationController {
     }
     // 순번 체크
     @PostMapping("/order")
-    public String getOrder(@RequestParam("reservationId") String reservationId) {
+    public String order(@RequestParam("reservationId") String reservationId) {
         ReservationOrderDTO dto = cacheManager.getCache("RESERVATION_ID").get(reservationId,ReservationOrderDTO.class);
+        int isPass = dto.getIsPass();
         int order = dto.getOrder();
         int pCount = QueueManager.getPlusCount();
         int mCount = QueueManager.getMinusCount();
-        int isPass = dto.getIsPass();
         int curOrder = order+mCount-ReservationOrderService.ALLOCATED_NUMBER;
         int[] temp = new int[]{ pCount+mCount , curOrder > 0 ? curOrder : 0,isPass};
         return new Gson().toJson(temp);
@@ -67,11 +71,11 @@ public class ReservationController {
 
         boolean isSuccess = reservationService.submitReservation(userId,seatId);
         if(!isSuccess){
-            return new Gson().toJson(SeatManager.seatList);
+            return "1;"+new Gson().toJson(SeatManager.seatList);
         }else{
             ReservationOrderService.decreseCurNum();
             QueueManager.decreasaeCount();
-            return "0;"+seatId;
+            return "0;"+new Gson().toJson(SeatManager.seatList);
         }
     }   
     @PostMapping("/seat")
