@@ -119,7 +119,10 @@ const refresh = async function (reservationId) {
         console.log(temp);
         document.getElementById('reservation-total-count').innerText = temp[0];
         document.getElementById('reservation-order').innerText = temp[1];
+        console.log(temp[2]+"임");
         if (temp[2] === 0) {
+            console.log("예약 시작");
+            document.getElementById('reservation-order').innerText = 0;
             clearInterval(intervalId);
             setReservation();
         }

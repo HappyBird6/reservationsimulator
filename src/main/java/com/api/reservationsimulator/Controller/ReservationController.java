@@ -39,8 +39,6 @@ public class ReservationController {
     public ReservationOrderDTO reserve(@RequestParam("userId") String userId) throws JsonProcessingException, AmqpException {
         String reservationId = UUID.randomUUID().toString();
         int total = 1 + QueueManager.getPlusCount()+QueueManager.getMinusCount();
-        // System.out.println("PlusCount : "+QueueManager.getPlusCount());
-        // System.out.println("MinusCount : "+QueueManager.getMinusCount());
         int isPass = (total <= ReservationOrderService.ALLOCATED_NUMBER)? 0 : 1;
         ReservationOrderDTO dto = new ReservationOrderDTO(
                                         userId,
@@ -62,6 +60,8 @@ public class ReservationController {
         int pCount = QueueManager.getPlusCount();
         int mCount = QueueManager.getMinusCount();
         int curOrder = order+mCount-ReservationOrderService.ALLOCATED_NUMBER;
+        // System.out.println(reservationId +" : "+curOrder+","+isPass);
+        if(curOrder <= 0) isPass = 0;
         int[] temp = new int[]{ pCount+mCount , curOrder > 0 ? curOrder : 0,isPass};
         return new Gson().toJson(temp);
     }

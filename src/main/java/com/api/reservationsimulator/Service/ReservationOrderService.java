@@ -47,7 +47,6 @@ public class ReservationOrderService {
          */
         int cnt = 0;
         int limit = (ALLOCATED_TIME/1000) * (ALLOCATED_NUMBER+1);
-   
         /*
          * currentNumber : atomic.class 타입, 현재 예약중인 사람의 숫자
          * ALLOCATED_NUMBER : final static int 타입, 동시에 예약 가능한 사람의 숫자 한계치 
@@ -65,7 +64,7 @@ public class ReservationOrderService {
         }
         // ReservationOrderDTO(유저Id,예약Id,순서,예약 flag,seatId)
         cacheManager.getCache("RESERVATION_ID").put(reservationId, new ReservationOrderDTO(userId,reservationId,1,0));
-
+        
         currentNumber.addAndGet(1);
     }
     
