@@ -4,9 +4,14 @@
 RabbitMQ를 이용한 간단한 예약 대기열 구현<br>
 RabbitMQ 환경 세팅 및 학습용
 
-### 기간 / 인원
+### 기술
 <hr>
 
++ 언어 : JAVA
++ 프레임워크 : SpringBoot
++ 라이브러리 : Caffeine cache
++ 도구 : RabbitMQ
++ 
 ### 기능
 <hr>
 
@@ -27,14 +32,6 @@ Polling으로 예약가능 상태 정보를 받고 예약 가능 상태로 변�
 ![sample_reservation_3](https://github.com/user-attachments/assets/5fb587c4-17d3-4848-869c-4bebd7de00ec)
 B(10002) 좌석을 신청완료
 ![sample_reservation_4](https://github.com/user-attachments/assets/ea569f12-505a-4d0b-9674-6b412ea3266c)
-
-### 기술
-<hr>
-
-+ 언어 : JAVA
-+ 프레임워크 : SpringBoot
-+ 라이브러리 : Caffeine cache
-+ 도구 : RabbitMQ
 
 ### 학습 사항
 <hr>
